@@ -1,0 +1,59 @@
+#include <iostream>
+#include <pthread.h>
+#include <queue>
+#include <unistd.h>
+using namespace std;
+
+pthread_rwlock_t rwlock;
+queue<int> q;
+const int maxn = 200;
+
+void* producer(void* args){
+	int i = 1;
+	while(true){
+		if(i>=maxn){
+			return nullptr;
+		}
+		pthread_rwlock_wrlock(&rwlock);
+		int val = i++;
+		q.push(val);
+		cout << "input " << pthread_self() << " val: "  << val << endl;
+		pthread_rwlock_unlock(&rwlock);
+		sleep(0.01);
+		i++;
+	}
+}
+
+void* consumer(void* args){
+	while (true){
+		if(!q.empty()){
+			pthread_rwlock_rdlock(&rwlock);
+			int val = q.front();
+			q.pop();
+			pthread_rwlock_unlock(&rwlock);
+		    cout << "output " << pthread_self() << " val: "  << val << endl;
+		}
+	}
+}
+
+int main(){
+	pthread_t p1,p2,c1,c2;
+	pthread_rwlock_init(&rwlock, nullptr);
+
+	pthread_create(&p1,nullptr,producer,nullptr);
+	//pthread_create(&p2,nullptr,producer,nullptr);
+	pthread_create(&c1,nullptr,consumer,nullptr);
+	pthread_create(&c2,nullptr,consumer,nullptr);
+
+	pthread_join(p1,nullptr);
+	//pthread_join(p2,nullptr);
+	pthread_join(c1,nullptr);
+	pthread_join(c2,nullptr);
+
+	pthread_rwlock_destroy(&rwlock);
+
+	return 0;
+
+
+
+}

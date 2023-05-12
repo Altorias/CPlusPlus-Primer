@@ -1,0 +1,137 @@
+//
+// Created by Charliegu on 2023/5/8.
+//
+#include <iostream>
+#include <map>
+using namespace std;
+
+class Node{
+public:
+    int key;
+    int value;
+    Node* pre;
+    Node* next;
+    Node(int k, int v):key(k),value(v),pre(nullptr),next(nullptr){};
+};
+
+class LRU_Algorithm{
+private:
+    int max_capacity;
+    Node* first_node;
+    Node* last_node;
+    map<int, Node*> node_map;
+
+
+public:
+    LRU_Algorithm(int cap): max_capacity(cap), first_node(nullptr), last_node(nullptr){};
+    Node* get(int key){
+        map<int, Node*>::iterator it = node_map.find(key);
+        // 如果找到了
+        if (it != node_map.end()){
+            Node* node = it->second;
+            remove(node);
+            insert(node);
+            return node;
+        }else{
+            return nullptr;
+        }
+    };
+
+    void put(int key, int value){
+        map<int, Node* >::iterator it = node_map.find(key);
+        if (it != node_map.end())
+        {
+            Node *node = it -> second;
+            node -> value = value;
+            remove(node);
+            insert(node);
+        }
+        else
+        {
+            Node *newNode = new Node(key, value);
+            if (node_map.size() >= max_capacity)
+            {
+                map<int, Node *>::iterator iter = node_map.find(last_node -> key);
+                remove(last_node);
+                node_map.erase(iter);
+            }
+            insert(newNode);
+            node_map[key] = newNode;
+        }
+    };
+
+    // 往链表头部插入节点
+    void insert(Node* node){
+        // 如果头部节点不为空，证明LRU内的双端链表不为空:
+        // 1. 参数节点的next指针指向头节点
+        // 2. 头节点的pre指针指向参数节点
+        if (nullptr != first_node){
+            node->next = first_node;
+            node->pre = nullptr;
+            first_node->pre = node;
+        }
+        // 将参数节点更新为头节点
+        first_node = node;
+
+        // 如果尾部节点为空，证明证明LRU内的双端链表为空:
+        // 设置参数节点为尾部节点
+        if (nullptr == last_node){
+            last_node = first_node;
+        }
+    };
+
+    //删除双向链表中的节点
+    void remove(Node* node){
+        // 如果参数节点pre指针指向的节点不为空，证明参数节点不是头部节点
+        if (nullptr != node->pre){
+            // 更新参数节点前一个节点的next指针
+            node->pre->next = node->next;
+        }else{
+            // 直接将参数节点的下一个节点设计为头部节点
+            first_node = node->next;
+        }
+        //如果参数节点next指针指向的节点不为空，证明参数节点不是尾节点
+        if (nullptr != node->next){
+            // 更新参数节点后一个节点的pre指针
+            node->next->pre = node->pre;
+        }else{
+            // 直接将参数节点的上一个节点设计为尾部节点
+            last_node = node->pre;
+        }
+        node = nullptr;
+        delete node;
+    }
+
+};
+
+void print(Node* node){
+    if (nullptr != node){
+        cout << node->value <<endl;
+    }else{
+        cout << "NULL" <<endl;
+    }
+}
+
+int main(){
+    LRU_Algorithm* lruAlgorithm = new LRU_Algorithm(3);
+    lruAlgorithm->put(1,11);
+    lruAlgorithm->put(2,22);
+    lruAlgorithm->put(3,33);
+    print(lruAlgorithm->get(3));
+    print(lruAlgorithm->get(2));
+    print(lruAlgorithm->get(1));
+    lruAlgorithm->put(4,44);
+    lruAlgorithm->put(5,55);
+    print(lruAlgorithm->get(1));
+    print(lruAlgorithm->get(2));
+    print(lruAlgorithm->get(5));
+    print(lruAlgorithm->get(4));
+//    cout << lruAlgorithm->get(1)<<endl;
+//    cout << lruAlgorithm->get(2)<<endl;
+//    cout << lruAlgorithm->get(5)<<endl;
+//    cout << lruAlgorithm->get(4)<<endl;
+    lruAlgorithm->put(5,555);
+    print(lruAlgorithm->get(5));
+//    cout << lruAlgorithm->get(5)<<endl;
+    return 0;
+}
