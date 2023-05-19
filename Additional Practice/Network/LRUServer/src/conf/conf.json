@@ -1,0 +1,11 @@
+{
+  "seq" : 0,
+  "port" : 8050,
+  "bufferSize": 1024,
+  "address" : "0.0.0.0",
+  "resourceCapacity": 5,
+  "cacheCapacity": 3,
+  "consumerThreads": 3,
+  "portLogFilePath": "../log/server_port.log",
+  "oprLogFilePath": "../log/server_opr.log"
+}

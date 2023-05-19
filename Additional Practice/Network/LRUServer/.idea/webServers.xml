@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="644e1446-c086-45e0-8e15-48ad20cfac5c" name="wsl">
+        <fileTransfer rootFolder="/home/gcl" accessType="SFTP" host="localhost" port="2222" sshConfigId="1968d8fa-a7ee-4fed-882b-41da2df6a294" sshConfig="gcl@localhost:2222 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

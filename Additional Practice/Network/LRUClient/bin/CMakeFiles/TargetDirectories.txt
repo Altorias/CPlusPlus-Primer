@@ -1,0 +1,3 @@
+/mnt/d/Code/LRUClient/bin/CMakeFiles/LRUClient.dir
+/mnt/d/Code/LRUClient/bin/CMakeFiles/edit_cache.dir
+/mnt/d/Code/LRUClient/bin/CMakeFiles/rebuild_cache.dir

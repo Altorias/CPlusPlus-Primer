@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/LRUServer.dir/src/main.cpp.o CMakeFiles/LRUServer.dir/src/ServerResourceQueue.cpp.o CMakeFiles/LRUServer.dir/src/Logger.cpp.o -o LRUServer  -ljsoncpp 
